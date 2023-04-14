@@ -17,8 +17,8 @@ export default function PostsList({posts}) {
 
                             {/* <BsHeartFill size={32}/> */}
                             <BsHeart size={32} className="inline-block mr-2"/>
-                            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">See All Likes</span>
-                            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">Delete Post</span>
+                            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">See All Likes</span>
+                            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">Delete Post</span>
                         </div>
                     </div>
                 </article>
