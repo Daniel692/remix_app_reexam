@@ -10,6 +10,7 @@ export default function PostsList({posts}) {
                             <div className="font-bold text-xl mb-2">{post.title}</div>
                             <p className="text-xs- mb-2">{post.postedBy}</p>
                             <p className="text-gray-700 text-base">{post.body}</p>
+                            <p className="text-gray-700 text-base">{post.starredBy}</p>
                             {/* TODO Implement Starred By */}
                             {/* <p>Starred By:</p> */}
                         </div>

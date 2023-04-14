@@ -45,7 +45,9 @@ const userSchema = new Schema({
     type: String,
     default: "https://api.dicebear.com/6.x/bottts/svg",
   },
-});
+},
+  { timestamps: true }
+);
 
 export const models = [
   {
