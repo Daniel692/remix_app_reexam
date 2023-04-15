@@ -22,6 +22,10 @@ const postSchema = new Schema(
         type: String,
         required: true,
     }, 
+    postedByUser: {
+      type: String,
+      required: true,
+  }, 
   },
   { timestamps: true }
 );

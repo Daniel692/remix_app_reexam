@@ -3,7 +3,7 @@ import { createCookieSessionStorage, redirect, createCookie } from "@remix-run/n
 const { getSession, commitSession, destroySession } = createCookieSessionStorage({
         cookie: createCookie("__session", {
             httpOnly: true,
-            maxAge: 60 * 60 * 24 * 7, // 1 week
+            maxAge: 60 * 60 * 24 * 7 * 4, 
             secrets: [process.env.SESSION_SECRET],
         }),
     });
@@ -15,4 +15,6 @@ export async function requireUserSession(request) {
     if (!session.get("userId")) {
         return redirect("/");
     }
+
+    return session;
 }

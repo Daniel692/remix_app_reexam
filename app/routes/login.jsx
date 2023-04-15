@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
 
 export async function loader({ request }) {
     const session = await getSession(request.headers.get("Cookie"));
-    console.log(session);
+    // console.log(session);
     return json({ userId: session.get("userId") });
   }
 
@@ -34,7 +34,9 @@ export async function action( {request }) {
         }
     }
     session.set("userId", user._id);
-
+    session.set("username", user.username);
+    console.log(session);
+    console.log("HHHHHHHHHHHHHHHHHHHHH")
     return redirect("/", {
         headers: {
             "Set-Cookie": await commitSession(session),
