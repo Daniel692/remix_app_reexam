@@ -68,6 +68,7 @@ export default function Index() {
                     {/* TODO Delete */}
                     <div className="font-bold text-xl mb-2">TITLE:{post.title}</div>
                     <Link to={'/user/' + post.postedBy} className="text-xs- mb-2">USER:<span className='underline'>{post.postedByUser}</span></Link>
+                    <Link to={'/user/' + post.postedBy + '/' + post._id} className="text-xs- mb-2">POST:<span className='underline'>{post.title}</span></Link>
                     <p className="text-gray-700 text-base">BODY:{post.body}</p>
                     <p className="text-gray-700 text-base">STARREDBY:{post.starredByNames}</p>
                 </div>

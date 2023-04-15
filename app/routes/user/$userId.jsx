@@ -1,5 +1,5 @@
 import { redirect, json } from "@remix-run/node";
-import { useLoaderData, Link, Form} from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 
 import connectDb from "~/db/dbConnection.server";
 
@@ -60,17 +60,15 @@ export default function UserPage() {
                             <div className="px-6 py-4">
                                 {/* TODO Delete */}
                                 <div className="font-bold text-xl mb-2">TITLE:{post.title}</div>
-                                <Link to={'/user/' + post.postedBy} className="text-xs- mb-2">USER:<span className='underline'>{post.postedByUser}</span></Link>
+                                <p to={'/user/' + post.postedBy} className="text-xs- mb-2">USER:{post.postedByUser}</p>
                                 <p className="text-gray-700 text-base">BODY:{post.body}</p>
                                 <p className="text-gray-700 text-base">STARREDBY:{post.starredByNames}</p>
                             </div>
                         </div>
                     </article>
                     )
-                }
-
+                    }
                 )}
-
             </div>
         </>
     )
