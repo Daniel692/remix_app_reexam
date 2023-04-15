@@ -18,13 +18,14 @@ const postSchema = new Schema(
     starredBy: {
       type: Array,
     },
+    starredByNames: {
+      type: Array,
+    },
     postedBy: {
         type: String,
-        required: true,
     }, 
     postedByUser: {
       type: String,
-      required: true,
   }, 
   },
   { timestamps: true }
