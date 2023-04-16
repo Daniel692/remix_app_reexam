@@ -55,7 +55,7 @@ export async function loader({ request }) {
   }
 
   const db = connectDb()
-  const posts = await db.models.Post.find()
+  const posts = await db.models.Post.find().sort({ _id: -1 });
   const user = {}
 
   user.userId = session.get("userId")
