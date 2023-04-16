@@ -3,8 +3,6 @@ import { useLoaderData, Link, Form } from "@remix-run/react";
 import connectDb from "~/db/dbConnection.server";
 import { getSession } from "~/session.server";
 
-import { useState } from "react";
-
 import { BsHeartFill, BsHeart } from 'react-icons/bs';
 
 export async function action({ request }) {
@@ -72,58 +70,84 @@ function isStarredBy(post, user) {
 
 export default function Index() {
 
-  const [showModal, setShowModal] = useState(false);
-
   function likedBy(values) {
-    if (values.length < 4) {
+    if (values.length  == 0) {
+      return "No one";
+    } else if (values.length < 4) {
       return values.join(", ");
     } else {
       return values.slice(0, 4).join(", ") + " and " + (values.length - 4) + " others";
     }
-  } 
-  
+  }
+
   const data = useLoaderData()
   console.log(data)
   const posts = data.posts
   const user = data.user
-  console.log(user)
-  console.log(posts)
-  console.log("HERE POSTS")
+
+  function formatDate(date) {
+    const d = new Date(date);
+    return d.toLocaleDateString('en-GB');
+  }
 
 
     return posts.map(post => (
-        <article key={post._id}>
-            <div className="max-w-sm rounded overflow-hidden shadow-lg">
-                <div className="px-6 py-4">
-                    {/* TODO Delete */}
-                    <div className="font-bold text-xl mb-2">{post.title}</div>
-                    <Link to={'/user/' + post.postedBy} className="text-xs- mb-2">Posted by: <span className='underline'>{post.postedByUser}</span></Link>
-                    {/* <Link to={'/user/' + post.postedBy + '/' + post._id} className="text-xs- mb-2">POST:<span className='underline'>{post.title}</span></Link> */}
-                    <p className="text-gray-700 text-base">{post.body}</p>
-                    <p className="text-gray-700 text-base">liked by: {likedBy(post.starredByNames)}</p>
-                </div>
-                <div className="px-4 pt-2 pb-4">
-                    <Form className="inline-block px-1 py-1 ml-1 mr-1 mb-2" method='post'>
-                        <input type="hidden" name='userId' value={user.userId} />
-                        <input type="hidden" name='username' value={user.username} />
-                        <input type="hidden" name='postId' value={post._id} />
-                        <button type="submit" name="action" value="likePost">
-                            {isStarredBy(post, user) ? <BsHeartFill size={32} className="inline-block mr-1"/> : <BsHeart  size={32} className="inline-block mr-1"/>}
-                        </button>
-                    </Form>
-                    <Link to={'/user/' + post.postedBy + '/' + post._id}><span className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">Detail</span></Link>
-                          {(user.username === post.postedByUser) &&
-                            <Form  className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2"  method="post">
-                              <input type="hidden" id="postId" name="postId" value={post._id}/>
-                              <button type="submit" name="action" value="deletePost">
-                                Delete
-                              </button>
-                            </Form>
-                          }
-                </div>
-            </div>
-        </article>
+<article key={post._id} className="my-4">
+  <div className="max-w-sm rounded-md overflow-hidden shadow-lg mx-auto bg-gray-100">
+  <div className="px-6 py-4">
+    <div className="font-bold text-xl">{post.title}</div>
+        <p className="text-xs my-2">Posted by: <Link to={'/user/' + post.postedBy} className='text-blue-500 underline'>{post.postedByUser}</Link> on {formatDate(post.createdAt)}</p>
+        <p className="text-gray-700 text-base">{post.body}</p>
+        <p className="text-xs mt-2">Liked by: {likedBy(post.starredByNames)}</p>
+    </div>
+    <div className="px-4 pt-2 pb-4">
+      <Form className="inline-block px-1 py-1 ml-1 mr-1 mb-2" method='post'>
+        <input type="hidden" name='userId' value={user.userId} />
+        <input type="hidden" name='username' value={user.username} />
+        <input type="hidden" name='postId' value={post._id} />
+        <button type="submit" name="action" value="likePost">
+          {isStarredBy(post, user) ? <BsHeartFill size={28} className="inline-block text-red-500 mx-2"/> : <BsHeart size={28} className="inline-block text-gray-300 hover:text-red-500 mx-2"/>}
+        </button>
+      </Form>
+      <Link to={'/user/' + post.postedBy + '/' + post._id}><span className="inline-block bg-gray-600 hover:bg-gray-700 rounded-lg px-3 py-1 text-sm font-semibold text-gray-100 mr-2">Detail</span></Link>
+      {(user.username === post.postedByUser) &&
+        <Form className="inline-block" method="post">
+          <input type="hidden" id="postId" name="postId" value={post._id}/>
+          <button type="submit" name="action" value="deletePost" className="bg-red-500 hover:bg-red-600 rounded-lg px-3 py-1 text-sm font-semibold text-gray-100">
+            Delete
+          </button>
+        </Form>
+      }
+    </div>
+  </div>
+</article>
+
+
+    
     )
   )
 }
 
+
+        // <Link to={'/user/' + post.postedBy + '/' + post._id}><span className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">Detail</span></Link>
+        //       {(user.username === post.postedByUser) &&
+        //         <Form  className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2"  method="post">
+        //           <input type="hidden" id="postId" name="postId" value={post._id}/>
+        //           <button type="submit" name="action" value="deletePost">
+        //             Delete
+        //           </button>
+        //         </Form>
+        //       }
+
+    //     </Form>
+    //     <Link to={'/user/' + post.postedBy + '/' + post._id}><span className="inline-block bg-gray-600 hover:bg-gray-700 rounded-lg px-3 py-1 text-sm font-semibold text-gray-100 mr-2">Detail</span></Link>
+    //     {(user.username === post.postedByUser) &&
+    //       <Form className="inline-block bg-red-500 hover:bg-red-600 rounded-lg px-3 py-1 text-sm font-semibold text-gray-100" method="post">
+    //         <input type="hidden" id="postId" name="postId" value={post._id}/>
+    //         <button type="submit" name="action" value="deletePost" >
+    //           Delete
+    //         </button>
+    //       </Form>
+    //     }
+    //   </div>
+    // </div>

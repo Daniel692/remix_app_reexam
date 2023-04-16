@@ -1,5 +1,5 @@
 import { redirect, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
 import { getSession } from "~/session.server";
 import connectDb from "~/db/dbConnection.server";
 
@@ -45,7 +45,21 @@ export default function UserPage() {
     const data = useLoaderData();
     const posts = data.userPosts;
     const user = data.user;
-    console.log(posts);
+
+    function likedBy(values) {
+        if (values.length  == 0) {
+          return "No one";
+        } else if (values.length < 4) {
+          return values.join(", ");
+        } else {
+          return values.slice(0, 4).join(", ") + " and " + (values.length - 4) + " others";
+        }
+      }
+
+    function formatDate(date) {
+        const d = new Date(date);
+        return d.toLocaleDateString('en-GB');
+      }
 
     return (
         <>
@@ -61,16 +75,17 @@ export default function UserPage() {
                 {posts.map((post) => {
                     return (
                         <article key={post._id}>
-                        <div className="max-w-sm rounded overflow-hidden shadow-lg">
-                            <div className="px-6 py-4">
-                                {/* TODO Delete */}
-                                <div className="font-bold text-xl mb-2">TITLE:{post.title}</div>
-                                <p to={'/user/' + post.postedBy} className="text-xs- mb-2">USER:{post.postedByUser}</p>
-                                <p className="text-gray-700 text-base">BODY:{post.body}</p>
-                                <p className="text-gray-700 text-base">STARREDBY:{post.starredByNames}</p>
+                            <div className="max-w-sm rounded-md overflow-hidden shadow-lg mx-auto bg-gray-100">
+                                <div className="px-6 py-4">
+                                    <div className="font-bold text-xl">{post.title}</div>
+                                    <p className="text-xs my-2">Posted by: <Link to={'/user/' + post.postedBy} className='text-blue-500 underline'>{post.postedByUser}</Link> on {formatDate(post.createdAt)}</p>
+                                    <p className="text-gray-700 text-base">{post.body}</p>
+                                    <p className="text-xs mt-2">Liked by: {likedBy(post.starredByNames)}</p>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
+
+
                     )
                     }
                 )}
