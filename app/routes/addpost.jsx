@@ -34,6 +34,10 @@ export default function AddPostPage() {
 
 export async function loader({ request }) {
     const session = await getSession(request.headers.get("Cookie"));
+    if (!session.get("userId")) {
+        return redirect("/login");
+      }
+      
     return json({ userId: session.get("userId"), username: session.get("username") });
   }
 

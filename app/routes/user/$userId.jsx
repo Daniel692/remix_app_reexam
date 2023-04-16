@@ -1,10 +1,15 @@
 import { redirect, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-
+import { getSession } from "~/session.server";
 import connectDb from "~/db/dbConnection.server";
 
 
-export async function loader({ params }) {
+export async function loader({ request, params }) {
+    const session = await getSession(request.headers.get("Cookie"));
+    if (!session.get("userId")) {
+        return redirect("/login");
+      }
+
     const db = connectDb();
     const user = await db.models.User.findById(params.userId);
     console.log(user);

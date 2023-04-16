@@ -6,7 +6,6 @@ import { getSession } from "~/session.server";
 import { useState } from "react";
 
 import { BsHeartFill, BsHeart } from 'react-icons/bs';
-import Modal from "~/components/Modal";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -49,11 +48,16 @@ export async function action({ request }) {
 }
 
 export async function loader({ request }) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (!session.get("userId")) {
+    return redirect("/login");
+  }
+
   const db = connectDb()
   const posts = await db.models.Post.find()
   const user = {}
 
-  const session = await getSession(request.headers.get("Cookie"));
   user.userId = session.get("userId")
   user.username = session.get("username")
 
@@ -69,6 +73,14 @@ function isStarredBy(post, user) {
 export default function Index() {
 
   const [showModal, setShowModal] = useState(false);
+
+  function likedBy(values) {
+    if (values.length < 4) {
+      return values.join(", ");
+    } else {
+      return values.slice(0, 4).join(", ") + " and " + (values.length - 4) + " others";
+    }
+  } 
   
   const data = useLoaderData()
   console.log(data)
@@ -88,7 +100,7 @@ export default function Index() {
                     <Link to={'/user/' + post.postedBy} className="text-xs- mb-2">Posted by: <span className='underline'>{post.postedByUser}</span></Link>
                     {/* <Link to={'/user/' + post.postedBy + '/' + post._id} className="text-xs- mb-2">POST:<span className='underline'>{post.title}</span></Link> */}
                     <p className="text-gray-700 text-base">{post.body}</p>
-                    {/* <p className="text-gray-700 text-base">STARREDBY:{post.starredByNames}</p> */}
+                    <p className="text-gray-700 text-base">liked by: {likedBy(post.starredByNames)}</p>
                 </div>
                 <div className="px-4 pt-2 pb-4">
                     <Form className="inline-block px-1 py-1 ml-1 mr-1 mb-2" method='post'>
@@ -100,44 +112,6 @@ export default function Index() {
                         </button>
                     </Form>
                     <Link to={'/user/' + post.postedBy + '/' + post._id}><span className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">Detail</span></Link>
-                    <button onClick={() => setShowModal(true)} type="button" className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">See Likes({post.starredBy.length})</button>
-                            {showModal ? (
-                               <>
-                               <div
-                                 className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                               >
-                                 <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                                   <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                     <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                                       <h3 className="text-3xl font-semibold">
-                                         Post Liked by:
-                                       </h3>
-                                     </div>
-                                     <div className="relative p-6 flex-auto">
-                                       <ul className="list-disc list-inside">
-                                         {post.starredByNames.map((username) => (
-                                           <li key={username}>
-                                               {username}
-                                           </li>
-                                         ))}
-                                       </ul>
-                                     </div>
-                                     <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                                       <button
-                                         className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                         type="button"
-                                         onClick={() => setShowModal(false)}
-                                       >
-                                         Close
-                                       </button>
-                                     </div>
-                                   </div>
-                                 </div>
-                               </div>
-                               <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                             </>
-                            )
-                            : null}
                           {(user.username === post.postedByUser) &&
                             <Form  className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2"  method="post">
                               <input type="hidden" id="postId" name="postId" value={post._id}/>
