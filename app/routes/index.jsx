@@ -69,7 +69,7 @@ function isStarredBy(post, user) {
 export default function Index() {
 
   const [showModal, setShowModal] = useState(false);
-
+  
   const data = useLoaderData()
   console.log(data)
   const posts = data.posts
@@ -138,12 +138,14 @@ export default function Index() {
                              </>
                             )
                             : null}
-                    <Form  className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2"  method="post">
-                      <input type="hidden" id="postId" name="postId" value={post._id}/>
-                      <button type="submit" name="action" value="deletePost">
-                        Delete
-                      </button>
-                    </Form>
+                          {(user.username === post.postedByUser) &&
+                            <Form  className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2"  method="post">
+                              <input type="hidden" id="postId" name="postId" value={post._id}/>
+                              <button type="submit" name="action" value="deletePost">
+                                Delete
+                              </button>
+                            </Form>
+                          }
                 </div>
             </div>
         </article>
