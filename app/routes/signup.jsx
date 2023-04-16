@@ -19,6 +19,24 @@ export async function action({ request }) {
         );
   }
 
+  if (data.password.length > 20 || data.username.length > 20) {
+    console.log(data.password.length);
+    console.log(data.username.length);
+    return json(
+      { errorMessage: "Username or password is too long", values: data },
+      { status: 400 }
+    );
+}
+
+if (data.password.length < 8 || data.username.length < 5) {
+    return json(
+        { errorMessage: "Username or password is too short", values: data },
+        { status: 400 }
+    );
+}
+
+// could also validate if password is strong enough but I don't think it's necessary
+
   if (data.password !== data.repeatPassword) {
     return json(
       { errorMessage: "Passwords do not match", values: data },
@@ -54,8 +72,6 @@ export default function SignUp() {
                         Password
                     </label>
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="*************" />
-                    {/* If empty I can add border-red-500 */}
-                    {/* <p className="text-red-500 text-xs italic">Please choose a password.</p> */}
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
