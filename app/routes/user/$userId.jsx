@@ -71,7 +71,7 @@ export default function UserPage() {
             <div>
                 {posts.map((post) => {
                     return (
-                        <article key={post._id}>
+                        <article className="my-4" key={post._id}>
                             <div className="max-w-sm rounded-md overflow-hidden shadow-lg mx-auto bg-gray-100">
                                 <div className="px-6 py-4">
                                     <div className="font-bold text-xl">{post.title}</div>

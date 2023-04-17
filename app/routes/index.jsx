@@ -116,27 +116,3 @@ export default function Index() {
     )
   )
 }
-
-
-        // <Link to={'/user/' + post.postedBy + '/' + post._id}><span className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2">Detail</span></Link>
-        //       {(user.username === post.postedByUser) &&
-        //         <Form  className="inline-block bg-gray-200 rounded-full px-3 py-1 ml-2 text-sm font-semibold text-gray-700 mr-2 mb-2"  method="post">
-        //           <input type="hidden" id="postId" name="postId" value={post._id}/>
-        //           <button type="submit" name="action" value="deletePost">
-        //             Delete
-        //           </button>
-        //         </Form>
-        //       }
-
-    //     </Form>
-    //     <Link to={'/user/' + post.postedBy + '/' + post._id}><span className="inline-block bg-gray-600 hover:bg-gray-700 rounded-lg px-3 py-1 text-sm font-semibold text-gray-100 mr-2">Detail</span></Link>
-    //     {(user.username === post.postedByUser) &&
-    //       <Form className="inline-block bg-red-500 hover:bg-red-600 rounded-lg px-3 py-1 text-sm font-semibold text-gray-100" method="post">
-    //         <input type="hidden" id="postId" name="postId" value={post._id}/>
-    //         <button type="submit" name="action" value="deletePost" >
-    //           Delete
-    //         </button>
-    //       </Form>
-    //     }
-    //   </div>
-    // </div>
