@@ -12,10 +12,7 @@ export async function loader({ request, params }) {
 
     const db = connectDb();
     const user = await db.models.User.findById(params.userId);
-    console.log(user);
     const userPosts = await db.models.Post.find({ postedBy: params.userId }).sort({ _id: -1 });;
-    console.log(userPosts);
-    console.log("USER POSTS")
     if (!user) {
         return redirect("/404");
     }

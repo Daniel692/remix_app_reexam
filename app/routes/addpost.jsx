@@ -57,7 +57,6 @@ export async function action({ request }) {
 
     let postData = Object.fromEntries(formData)
 
-    console.log(JSON.stringify(postData))
     const db = connectDb();
 	try {
 		const newPost = new db.models.Post(postData);

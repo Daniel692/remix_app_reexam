@@ -9,38 +9,28 @@ export async function action({ request }) {
   const formData = await request.formData();
   if (formData.get("action") === "likePost") {
     const data = Object.fromEntries(formData);
-    console.log(data);
     const db = connectDb();
     const post = await db.models.Post.findById(data.postId);
-    console.log(post)
-    console.log("FROM LIKEPOST FUNCTION")
-    console.log(post.starredBy.includes(data.userId))
     // check if user is in starredBy
     if (post.starredBy.includes(data.userId)) {
         // remove user from starredBy
         post.starredBy = post.starredBy.filter((id) => id !== data.userId);
         post.starredByNames = post.starredByNames.filter((name) => name !== data.username);
-        console.log("USER ALREADY LIKED")
         // update post
         await post.save();
     } else {
-        console.log("USER LIKED")
         // add user to starredBy
         post.starredBy.push(data.userId);
         post.starredByNames.push(data.username);
         // update post
         await post.save();
     }
-    console.log("Like Post Done")
     return json({ success: true });
   }
   if (formData.get("action") === "deletePost") {
     const data = Object.fromEntries(formData);
-    console.log(data);
     const db = connectDb();
     const deletedPost = await db.models.Post.findByIdAndDelete(data.postId);
-    console.log(deletedPost)
-    console.log("FROM DELETEPOST FUNCTION")
     return redirect("/");
 }
 }
@@ -81,7 +71,6 @@ export default function Index() {
   }
 
   const data = useLoaderData()
-  console.log(data)
   const posts = data.posts
   const user = data.user
 

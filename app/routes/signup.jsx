@@ -8,10 +8,9 @@ import bcrypt from "bcryptjs"
 export async function action({ request }) {
     const db = connectDb();
     const formData = await request.formData()
-    console.log(formData)
     const user = db.models.User;
     let data = Object.fromEntries(formData);
-    console.log(data)
+    (data)
     if (data.password === "" || data.username === "") {
         return json(
             { errorMessage: "Please fill out all fields", values: data },
@@ -20,8 +19,6 @@ export async function action({ request }) {
   }
 
   if (data.password.length > 20 || data.username.length > 20) {
-    console.log(data.password.length);
-    console.log(data.username.length);
     return json(
       { errorMessage: "Username or password is too long", values: data },
       { status: 400 }

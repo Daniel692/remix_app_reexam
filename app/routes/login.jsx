@@ -9,7 +9,6 @@ import bcrypt from "bcryptjs";
 
 export async function loader({ request }) {
     const session = await getSession(request.headers.get("Cookie"));
-    // console.log(session);
     return json({ userId: session.get("userId") });
   }
 
@@ -17,11 +16,9 @@ export async function loader({ request }) {
 export async function action( {request }) {
     const formData = await request.formData();
     const data = Object.fromEntries(formData);
-    console.log(data);
     const session = await getSession(request.headers.get("Cookie"));
     const db = connectDb();
     const user = await db.models.User.findOne({ username: formData.get('username')});
-    console.log(user);
 
     if (!user) {
         return json({ errorMessage: "Username or password is incorrect", values: data }, { status: 400 });
@@ -35,8 +32,6 @@ export async function action( {request }) {
     }
     session.set("userId", user._id);
     session.set("username", user.username);
-    console.log(session);
-    console.log("HHHHHHHHHHHHHHHHHHHHH")
     return redirect("/", {
         headers: {
             "Set-Cookie": await commitSession(session),
@@ -47,8 +42,6 @@ export async function action( {request }) {
 export default function Login() {
     const dataAction = useActionData();
     const { userId } = useLoaderData();
-    console.log(userId);
-    console.log("HERE")
 
     if (userId) {
         return (
